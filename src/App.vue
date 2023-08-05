@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker" />
+    <Header @toggle-add-task="onToggleAddTask" title="Task Tracker" />
     <div v-show="showAddTask">
       <AddTask @add-task="addTask" />
     </div>
@@ -31,6 +31,10 @@ export default {
     };
   },
   methods: {
+    onToggleAddTask() {
+      this.showAddTask = !this.showAddTask;
+    },
+
     addTask(task) {
       this.tasks = [...this.tasks, task];
     },
