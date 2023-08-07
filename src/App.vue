@@ -13,8 +13,9 @@
       @delete-task="deleteTask"
       :tasks="tasks"
     />
-    <Footer />
   </div>
+  <Footer />
+  <router-view></router-view>
 </template>
 
 <script>
@@ -156,6 +157,15 @@ body {
 
 .btn-block {
   display: block;
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  background-color: #f4f4f4;
+  padding: 10px 0;
+  position: absolute;
+  bottom: 0;
   width: 100%;
 }
 </style>
