@@ -39,23 +39,29 @@ export default {
       this.showAddTask = !this.showAddTask;
     },
 
-    async ddTask(task) {
-      const res = await fetch('api/tasks', {
-        method: 'POST',
+    async addTask(task) {
+      const res = await fetch("api/tasks", {
+        method: "POST",
         headers: {
-          'Content-type': 'application/json'
+          "Content-type": "application/json",
         },
-        body: JSON.stringify(task)
-      })
+        body: JSON.stringify(task),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
-      this.tasks = [...this.tasks, task];
+      this.tasks = [...this.tasks, data];
     },
 
-    deleteTask(id) {
+    async deleteTask(id) {
       if (confirm("Are you sure?")) {
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        const res = await fetch(`api/tasks/${id}`, {
+          method: "DELETE",
+        });
+
+        res.status === 200
+          ? (this.tasks = this.tasks.filter((task) => task.id !== id))
+          : alert("Error Deleting This Task");
       }
     },
 
@@ -65,7 +71,7 @@ export default {
       );
     },
     async fetchTasks() {
-      const res = await fetch('api/tasks');
+      const res = await fetch("api/tasks");
 
       const data = await res.json();
 
@@ -79,11 +85,10 @@ export default {
 
       return data;
     },
-    
   },
   async created() {
-    this.tasks = await this.fetchTasks()
-  }
+    this.tasks = await this.fetchTasks();
+  },
 };
 </script>
 
