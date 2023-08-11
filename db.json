@@ -4,7 +4,7 @@
       "id": "2",
       "text": "Meeting at School",
       "day": "March 6th at 1:30pm",
-      "reminder": false
+      "reminder": true
     },
     {
       "id": "3",
@@ -17,12 +17,6 @@
       "day": "August 17, 2023 at 7pm",
       "reminder": true,
       "id": "HNPSvy4"
-    },
-    {
-      "text": "Study Coding",
-      "day": "Friday at 5pm",
-      "reminder": true,
-      "id": "qgi35wz"
     }
   ]
 }

@@ -11,6 +11,8 @@
 import Tasks from "../components/Tasks.vue";
 import AddTask from "../components/AddTask.vue";
 
+const apiBaseUrl = "http://127.0.0.1:8000/api";
+
 export default {
   name: "Home",
   props: {
@@ -27,7 +29,7 @@ export default {
   },
   methods: {
     async addTask(task) {
-      const res = await fetch("api/tasks", {
+      const res = await fetch(`${apiBaseUrl}/tasks`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -42,7 +44,7 @@ export default {
 
     async deleteTask(id) {
       if (confirm("Are you sure?")) {
-        const res = await fetch(`api/tasks/${id}`, {
+        const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
           method: "DELETE",
         });
 
@@ -56,7 +58,7 @@ export default {
       const taskToToggle = await this.fetchTask(id);
       const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
 
-      const res = await fetch(`api/tasks/${id}`, {
+      const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -71,7 +73,7 @@ export default {
       );
     },
     async fetchTasks() {
-      const res = await fetch("api/tasks");
+      const res = await fetch(`${apiBaseUrl}/tasks`);
 
       const data = await res.json();
 
@@ -79,7 +81,7 @@ export default {
     },
 
     async fetchTask(id) {
-      const res = await fetch(`api/tasks/${id}`);
+      const res = await fetch(`${apiBaseUrl}/tasks/${id}`);
 
       const data = await res.json();
 
