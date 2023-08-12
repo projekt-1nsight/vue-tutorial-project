@@ -10,6 +10,7 @@
 <script>
 import Tasks from "../components/Tasks.vue";
 import AddTask from "../components/AddTask.vue";
+import axios from "axios"; // CORS issue, trying Axios out instead of fetch API
 
 const apiBaseUrl = "http://127.0.0.1:8000/api";
 
@@ -29,65 +30,116 @@ export default {
   },
   methods: {
     async addTask(task) {
-      const res = await fetch(`${apiBaseUrl}/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
+      // Old method using fetch API
+      // const res = await fetch(`${apiBaseUrl}/tasks`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify(task),
+      // });
 
-      const data = await res.json();
+      // const data = await res.json();
 
-      this.tasks = [...this.tasks, data];
+      // this.tasks = [...this.tasks, data];
+      try {
+        const res = await axios.post(`${apiBaseUrl}/tasks`, task);
+
+        this.tasks = [...this.tasks, res.data];
+      } catch (error) {
+        console.log("Error Adding Task:", error);
+      }
     },
 
     async deleteTask(id) {
-      if (confirm("Are you sure?")) {
-        const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
-          method: "DELETE",
-        });
+      // Old method using fetch API
+      // if (confirm("Are you sure?")) {
+      //   const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
+      //     method: "DELETE",
+      //   });
 
-        res.status === 200
-          ? (this.tasks = this.tasks.filter((task) => task.id !== id))
-          : alert("Error Deleting This Task");
+      //   res.status === 200
+      //     ? (this.tasks = this.tasks.filter((task) => task.id !== id))
+      //     : alert("Error Deleting This Task");
+      // }
+      if (confirm("Are you sure?")) {
+        try {
+          const res = await axios.delete(`${apiBaseUrl}/tasks/${id}`);
+
+          if (res.status === 200) {
+            this.tasks = this.tasks.filter((task) => task.id !== id);
+          } else {
+            alert("Error Deleting This Task");
+          }
+        } catch (error) {
+          console.log("Error Deleting Task:", error);
+        }
       }
     },
 
     async toggleReminder(id) {
-      const taskToToggle = await this.fetchTask(id);
-      const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
+      // Old method using fetch API
+      // const taskToToggle = await this.fetchTask(id);
+      // const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
 
-      const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(updTask),
-      });
+      // const res = await fetch(`${apiBaseUrl}/tasks/${id}`, {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify(updTask),
+      // });
 
-      const data = await res.json();
+      // const data = await res.json();
 
-      this.tasks = this.tasks.map((task) =>
-        task.id === id ? { ...task, reminder: data.reminder } : task
-      );
+      // this.tasks = this.tasks.map((task) =>
+      //   task.id === id ? { ...task, reminder: data.reminder } : task
+      // );
+      try {
+        const taskToToggle = await this.fetchTask(id);
+        const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
+
+        const res = await axios.put(`${apiBaseUrl}/tasks/${id}`, updTask);
+
+        this.tasks = this.tasks.map((task) =>
+          task.id === id ? { ...task, reminder: res.data.reminder } : task
+        );
+      } catch (error) {
+        console.log("Error Toggling Reminder:", error);
+      }
     },
+
     async fetchTasks() {
-      const res = await fetch(`${apiBaseUrl}/tasks`);
+      // Old method using fetch API
+      // const res = await fetch(`${apiBaseUrl}/tasks`);
+      // const data = await res.json();
+      // return data;
+      try {
+        const res = await axios.get(`${apiBaseUrl}/tasks`);
 
-      const data = await res.json();
-
-      return data;
+        return res.data;
+      } catch (error) {
+        console.error("Error Fetching Tasks:", error);
+        return [];
+      }
     },
 
     async fetchTask(id) {
-      const res = await fetch(`${apiBaseUrl}/tasks/${id}`);
-
-      const data = await res.json();
-
-      return data;
+      // Old method using fetch API
+      // const res = await fetch(`${apiBaseUrl}/tasks/${id}`);
+      // const data = await res.json();
+      // return data;
+      try {
+        const res = await axios.get(`${apiBaseUrl}/tasks/${id}`);
+        
+        return res.data;
+      } catch (error) {
+        console.error("Error Fetching Task:", error);
+        return null;
+      }
     },
   },
+
   async created() {
     this.tasks = await this.fetchTasks();
   },
