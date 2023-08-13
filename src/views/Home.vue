@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     async addTask(task) {
-      console.log(task);
       // Old method using fetch API
       // const res = await fetch(`${apiBaseUrl}/tasks`, {
       //   method: "POST",
