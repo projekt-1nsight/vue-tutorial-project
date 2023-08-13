@@ -13,6 +13,7 @@ import AddTask from "../components/AddTask.vue";
 import axios from "axios"; // CORS issue, trying Axios out instead of fetch API
 
 const apiBaseUrl = "http://127.0.0.1:8000/api";
+// const apiBaseUrl = "api";
 
 export default {
   name: "Home",
@@ -30,6 +31,7 @@ export default {
   },
   methods: {
     async addTask(task) {
+      console.log(task);
       // Old method using fetch API
       // const res = await fetch(`${apiBaseUrl}/tasks`, {
       //   method: "POST",
@@ -68,6 +70,7 @@ export default {
 
           if (res.status === 200) {
             this.tasks = this.tasks.filter((task) => task.id !== id);
+            alert("Task Deleted");
           } else {
             alert("Error Deleting This Task");
           }
